@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block link_block %}
+<link rel="stylesheet" href="{% static 'motivator_site/css/shop_item_edit_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% if not is_edit %}
+    <div>
+        <p>Формат:</p>
+        <div class="d-flex">
+            <div class="form-check">
+                <a href="{% url 'digital_item_create' %}" class="btn btn-primary digital_button">Цифровой</a>
+            </div>
+            <div class="form-check ml-2">
+                <a href="{% url 'physical_item_creation' %}" class="btn btn-primary physical_button">Физический</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% block item_content %}
+    {% endblock %}
+    {% block script_content %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}

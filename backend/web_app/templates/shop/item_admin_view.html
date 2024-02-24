@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block link_block %}
+<link rel="stylesheet" href="{% static 'motivator_site/css/shop_item_creation_style.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div>
+        <p class="text-xl-center" style="font-size: 2em;">Статистика продаж</p>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">№</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Логин</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Наименование</th>
+                <th scope="col">Дата</th>
+              </tr>
+            </thead>
+            <tbody class="tbody_scrollable">
+              <tr>
+                <th scope="row">1</th>
+                <td>Иванов Иван</td>
+                <td>@ivanovivan555</td>
+                <td>15</td>
+                <td>Футболка</td>
+                <td>Дата</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <div style="margin-top: 4vw;">
+        <div class="d-flex align-items-center justify-content-center">
+            <p class="text-center" style="font-size: 2em;">Товары</p>
+            <div>
+                <a href="{% url 'digital_item_create' %}" class="ml-3" style="background-color: rgb(127,71,255); color: white; padding: 7px; border-radius: 7px;">Добавить новый</a>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center" style="margin-top: 1rem;">
+          {% for item in items %}
+          <div class="card card_item_edit col-xl-3">
+                <img src="{% url 'index' %}media/{{ item.image }}" class="card-img-top">
+              <div class="card-body">
+              <h5 class="card-title">{{item.id}} {{item.name}}</h5>
+              <p class="card-text">Стоимость: {{item.price}}</p>
+              <a href="{% url 'edit_item' item.id %}" class="btn btn-primary" style="background-color: rgb(127,71,255);">Редактировать</a>
+              </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+    </div>
+</div>
+
+
+{% endblock %}

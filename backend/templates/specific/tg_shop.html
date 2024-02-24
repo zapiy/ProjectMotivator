@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block route %}Магазин на диване{% endblock %} 
+
+{% block head %}
+    <style>
+        .prod-card{
+            min-width: 18rem; 
+            width: 18rem; 
+            display: inline-block;
+        }
+
+        .modal-backdrop{
+            display: none;
+        }
+        .modal:target{
+            display: block;
+        }
+        .modal:target + .modal-backdrop{
+            display: block;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="context" class="container">
+
+        <h1 class="my-4">
+            {% if user.platform == "TG" %}
+                <img src="/media/logos/telegram.jpg" alt="Telegram" class="user-platform-mark">
+            {% elif user.platform == "SLC" %}
+                <img src="/media/logos/slack.jpg" alt="Slack" class="user-platform-mark">
+            {% endif %}
+
+            {{ user.full_name }} 
+            <span class="link">@{{ user.login }}</span>
+        </h1>
+
+        <nav class="my-2" aria-label="...">
+            <ul class="pagination">
+                
+                {% for bal in all_balances %}
+                    {% if bal.id == balance.id %}
+                        <li class="page-item disabled mx-1">
+                            <a href="#" class="page-link">
+                                By {{ bal.binded.full_name }}
+                                <span class="link">@{{ bal.binded.tg_login }}</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item mx-2">
+                            <a href="?target={{ bal.id }}" class="page-link text-white">
+                                By {{ bal.binded.full_name }}
+                                <span class="link">@{{ bal.binded.tg_login }}</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+        </nav>
+
+        <div class="card my-4">
+            <div class="card-body">
+                <ul>
+                    <li>Остаток сейфа - <b>{{ balance.safe_balance }} coins</b></li>
+                </ul>
+            </div>
+        </div>
+
+        <h1 class="my-2">Товары</h1>
+
+        <div>
+            {% for item in items %}
+                <div class="card mx-2 prod-card">
+                    {% if item.image %}
+                        <img src="/media/{{ item.image }}" class="card-img-top" style="max-height: 200px;">
+                    {% else %}
+                        <img src="/media/images/no_image.jpg" class="card-img-top" style="max-height: 200px;">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">
+                            <ul>
+                                <li>Стоимость: <b>{{ item.price }} coins</b></li>
+                                {% if item.is_infinity %}
+                                    <li>Количество: <b>Бесконечно</b></li>
+                                {% else %}
+                                    <li>Количество: <b>{{ item.count }}</b></li>
+                                {% endif %}
+                            </ul>
+                        </p>
+                        <a href="{% url 'routes:tg_shop_buy' user.user_token item.id %}" class="btn btn-primary">
+                            Купить
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <h4 class="my-3 mx-3">
+                    <p>Нет товаров, которые вам доступны!</p>
+                    <p>Попросите администратора их добавить</p>
+                </h4>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block outer %}
+
+    {% if modal %}
+        <div id="info-modal" class="modal fade show" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ modal.title }}</h5>
+                </div>
+                <div class="modal-body">
+                    <p>{{ modal.body }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" type="button" class="btn btn-primary">
+                        Okay
+                    </a>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="modal-backdrop fade show"></div>
+
+        <script type='text/javascript'>
+            $(document).ready(function(){
+                window.location = '#info-modal'
+            });
+        </script>
+    {% endif %}
+
+{% endblock %}

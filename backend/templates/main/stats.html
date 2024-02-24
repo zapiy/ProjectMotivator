@@ -1,0 +1,129 @@
+{% extends "../base.html" %}
+
+{% block route %}Статистика{% endblock %} 
+
+{% block header_nav %}
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Статистика</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:items_view' %}">Магазин</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:settings' %}">Настройки</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:logout' %}">Выход</a>
+        </li>
+    </ul>
+{% endblock %} 
+
+{% block content %}
+    <div id="context" class="container">
+
+        <h1 class="my-3">Статистика</h1>
+        
+        {% if chats %}
+            <div class="card my-4">
+                <div class="card-body">
+                    <ol>
+                        {% for chat in chats %}
+                            <li>
+                                <div>
+
+                                    {% if chat.platform == "TG" %}
+                                        <img src="/media/logos/telegram.jpg" alt="Telegram" class="user-platform-mark--mini">
+                                    {% elif chat.platform == "SLC" %}
+                                        <img src="/media/logos/slack.jpg" alt="Slack" class="user-platform-mark--mini">
+                                    {% endif %}
+
+                                    <span>
+                                        В группе "<b>{{ chat.full_name }}</b>" - {{ chat.users_count }} участник(а)
+                                    </span>
+                                </div>
+                                    
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div> 
+        {% endif %}
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">Платформа</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Баланс</th>
+                    <th scope="col">Баланс Сейфа</th>
+                    <th scope="col">Дата обновления</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for balance in page_obj %}
+                    {% with user=balance.user %}
+                        <tr>
+                            <td class="text-center">
+                                {% if user.platform == "TG" %}
+                                    <img src="/media/logos/telegram.jpg" alt="Telegram" class="user-platform-mark">
+                                {% elif user.platform == "SLC" %}
+                                    <img src="/media/logos/slack.jpg" alt="Slack" class="user-platform-mark">
+                                {% endif %}
+                            </td>
+                            <td>{{ user.full_name }}</td>
+                            <td>
+                                {% if user.platform == "TG" %}
+                                    <a href="https://t.me/{{ user.login }}" class="link" target=”_blank”>
+                                        @{{ user.login }}
+                                    </a>
+                                {% else %}
+                                    <span class="link">
+                                        @{{ user.login }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ balance.current_balance }}</td>
+                            <td>{{ balance.safe_balance }}</td>
+                            <td>{{ balance.clear_time }}</td>
+                            <td>
+                                <a href="{% url 'routes:user_stat' id=user.id %}" type="button" class="btn btn-primary">
+                                    Подробнее
+                                </a>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% empty %}
+                    <h4 class="my-3">
+                        В статистике пусто, скорее всего нужно 
+                        <a href="{% url 'routes:settings' %}" class="link"”>
+                            добавить бота
+                        </a>
+                    </h4>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        
+
+        <nav aria-label="...">
+            <ul class="pagination">
+                
+                {% for page in page_obj.paginator.num_pages|paginator %}
+                    {% if page == page_obj.number %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a href="?p={{ page }}" class="page-link">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav>
+
+    </div>
+{% endblock %} 

@@ -1,0 +1,78 @@
+{% extends "../base.html" %}
+
+{% block route %}Настройки{% endblock %} 
+
+{% block header_nav %}
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:stats' %}">Статистика</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:items_view' %}">Магазин</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Настройки</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'routes:logout' %}">Выход</a>
+        </li>
+    </ul>
+{% endblock %} 
+
+{% block content %}
+    <div id="context" class="container">
+        <div id="context" class="container">
+            <h1 class="my-3">Настройки</h1>
+            
+            <div class="card w-75 my-4">
+                <div class="card-body">
+                  <p>Чтобы всё заработало, нужно:</p>
+                  <ol>
+                    <li>Перейдите в 
+                        <a href="https://t.me/crissbot" class="link" target=”_blank”>
+                            @crissbot
+                        </a>
+                    </li>
+                    <li>Добавить бота в группу с правами администратора.</li>
+                    <li>Ввести команду в группе /webadmin и прописать уникальный API-ключ. Он ниже.</li>
+                  </ol>
+                  <!-- <p class="font-weight-light">
+                    Примечание: API KEY обновляется после каждого добавления бота.
+                  </p> -->
+                </div>
+              </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">API KEY:</span>
+                </div>
+                
+                <input value="{{ user_token }}" id="user_token" type="text" class="form-control" aria-describedby="User Api Key" disabled>
+                
+                <div class="input-group-append">
+                    <button id="copy_btn" class="btn btn-success" type="button">Copy</button>
+                </div>
+            </div>
+        
+        </div>
+
+    </div>
+{% endblock %} 
+
+{% block outer %}
+
+    <script>
+        $( document ).ready(function() {
+            $('#copy_btn').click((ev) => {
+                navigator.clipboard.writeText(
+                    $('#user_token').val()
+                ).then(function() {
+                    alert('Успешно скопировано!');
+                }, function(err) {
+                    alert('Ошибка: не возможно скопировать');
+                });
+            })
+        })
+    </script>
+
+{% endblock %}

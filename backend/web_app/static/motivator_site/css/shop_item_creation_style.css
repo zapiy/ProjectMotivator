@@ -1,0 +1,22 @@
+.tbody_scrollable {
+  overflow-y: scroll;
+  height: 100px;            
+  width: 99%;
+  position: absolute;
+}
+
+table {
+    height: 100px;
+}
+
+tr {
+  width: 99%;
+  display: inline-table;
+  table-layout: fixed;
+}
+
+.card_item_edit {
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: 2em;
+}

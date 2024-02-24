@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+
+<div class="container-fluid mt-5">
+    <H1 class="text-center">Успешная покупка</H1>
+</div>
+
+<style>
+
+    .btn_back {
+        width: 30em;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div style='margin-top: 5em;'>
+    <H4 class='text-center'>Вы приобрели товар: </H4>
+
+    <div class="row justify-content-center align-items-center" style="margin-top: 1rem;">
+        <div class="card card_item col-xl-3">
+            <img src="{% url 'index' %}media/{{ item.image }}" class="card-img-top">
+            <div class="card-body">
+            <h5 class="card-title">{{item.id}} {{item.name}}</h5>
+            <p class="card-text">Стоимость: {{item.price}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center" style="margin-top: 2em;">
+            <a href="{% url 'index' %}" class="btn btn-primary btn_back">Назад</a>
+    </div>
+</div>
+
+{% endblock %}

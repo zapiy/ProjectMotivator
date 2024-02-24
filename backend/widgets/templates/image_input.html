@@ -1,0 +1,27 @@
+<div class="my-3">
+
+    <img id="imageinp--{{ widget.name }}--preview" 
+        src="{% if widget.value %}/media/{{ widget.value }}{% endif %}"
+        class="my-2" style="max-height: 30vh;" />
+    
+    <input type="file" name="{{ widget.name }}" accept="image/*" 
+        class="form-control" id="imageinp--{{ widget.name }}" 
+        {% if widget.required and not widget.value %} required {% endif %}>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const selector = document.querySelector('#imageinp--{{ widget.name }}');
+        const preview = document.querySelector('#imageinp--{{ widget.name }}--preview');
+        selector.onchange = (ev) => {
+            if (ev.target.files){
+                const file = ev.target.files[0];
+
+                if (file && file.name.match(/\.(jpg|jpeg|png|gif)$/) ) {
+                    preview.src = URL.createObjectURL(file);
+                } else {
+                    alert('This is not an image file!');
+                }   
+            } 
+        }
+    });
+</script>
